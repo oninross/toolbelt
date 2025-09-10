@@ -1,7 +1,7 @@
 {
   "name": "@oninross/toolbelt",
   "author": "oninross",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "CLI toolbelt for scaffolding, components, and guides.",
   "repository": {
     "type": "git",
@@ -20,5 +20,7 @@
     "nextjs",
     "storybook"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "inquirer": "^9.0.0"
+  }
 }
