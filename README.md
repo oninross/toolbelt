@@ -17,6 +17,7 @@ npx @oninross/toolbelt <command>
 | `--llm-guide`        | Generate `llm.txt` in the project root with LLM guidelines                 |
 | `--create-component` | Run `@oninross/create-component` to scaffold a new component               |
 | `--scaffold`         | Scaffold a Next.js + Storybook project (with TypeScript, ESLint, and SCSS) |
+| `--switch`, `-s`     | Interactively switch which SSH key is used for GitHub pushes               |
 | `--help`             | List all available commands                                                |
 
 ## Examples
@@ -37,6 +38,14 @@ Scaffold a Next.js + Storybook project:
 
 ```sh
 npx @oninross/toolbelt --scaffold
+```
+
+Switch SSH key for GitHub pushes:
+
+```sh
+npx @oninross/toolbelt --switch
+# or
+npx @oninross/toolbelt -s
 ```
 
 Show help:
