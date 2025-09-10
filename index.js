@@ -4,6 +4,7 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import inquirer from "inquirer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -88,24 +89,113 @@ else if (args.includes("--scaffold")) {
   }
 }
 
-// ✅ 4. List all available commands
+// ✅ 4. Switch SSH key for GitHub
+else if (args.includes("--switch") || args.includes("-s")) {
+  const sshDir = path.join(process.env.HOME || process.env.USERPROFILE, ".ssh");
+  let pubKeys = [];
+  try {
+    pubKeys = fs.readdirSync(sshDir).filter((f) => f.endsWith(".pub"));
+    if (pubKeys.length === 0) {
+      console.log("❌ No SSH public keys found in ~/.ssh");
+      process.exit(1);
+    }
+  } catch (e) {
+    console.error("❌ Could not read ~/.ssh directory");
+    process.exit(1);
+  }
+
+  // Try to detect currently used key for github.com
+  let currentKey = null;
+  let currentKeyDisplay = null;
+  try {
+    const sshConfig = path.join(sshDir, "config");
+    if (fs.existsSync(sshConfig)) {
+      const configContent = fs.readFileSync(sshConfig, "utf8");
+      const match = configContent.match(
+        /Host github.com[\s\S]*?IdentityFile (.*)/
+      );
+      if (match) {
+        currentKey = match[1].trim();
+        currentKeyDisplay = path.basename(currentKey) + ".pub";
+      }
+    }
+  } catch {}
+
+  (async () => {
+    if (currentKey) {
+      console.log(`\n🔑 Currently used SSH key for GitHub: ${currentKey}`);
+    } else {
+      console.log(
+        "\n🔑 No SSH key is currently set for GitHub in your ~/.ssh/config."
+      );
+    }
+
+    console.log("\nAvailable SSH keys:");
+    pubKeys.forEach((k, i) => {
+      const keyPath = path.join(sshDir, k.replace(/\.pub$/, ""));
+      const isCurrent = currentKey && keyPath === currentKey;
+      console.log(`  [${i + 1}] ${k}${isCurrent ? " (current)" : ""}`);
+    });
+
+    const { selected } = await inquirer.prompt([
+      {
+        type: "list",
+        name: "selected",
+        message: "Which SSH key do you want to use for GitHub pushes?",
+        choices: pubKeys.map((k) => ({
+          name: k,
+          value: k.replace(/\.pub$/, ""),
+        })),
+      },
+    ]);
+
+    const selectedKeyPath = path.join(sshDir, selected);
+    // Update ~/.ssh/config for github.com
+    let configContent = "";
+    const sshConfig = path.join(sshDir, "config");
+    if (fs.existsSync(sshConfig)) {
+      configContent = fs.readFileSync(sshConfig, "utf8");
+      // Remove existing github.com block
+      configContent = configContent.replace(
+        /Host github.com[\s\S]*?(?=Host |$)/g,
+        ""
+      );
+    }
+    configContent += `\nHost github.com\n  HostName github.com\n  User git\n  IdentityFile ${selectedKeyPath}\n  IdentitiesOnly yes\n`;
+    fs.writeFileSync(sshConfig, configContent, "utf8");
+
+    // Add key to ssh-agent
+    try {
+      execSync(`ssh-add ${selectedKeyPath}`);
+      console.log(`\n✅ Switched GitHub SSH key to: ${selected}`);
+    } catch (e) {
+      console.log(
+        "⚠️  Could not add key to ssh-agent. You may need to run 'eval $(ssh-agent)' and try again."
+      );
+    }
+  })();
+}
+
+// ✅ 5. List all available commands
 else if (args.includes("--help")) {
   console.log(`\nAvailable commands in @oninross/toolbelt:`);
   console.log(`  --llm-guide         Generate llm.txt in the project root`);
   console.log(`  --create-component  Run @oninross/create-component`);
   console.log(`  --scaffold          Scaffold Next.js + Storybook`);
   console.log(
-    `  --help              List all available commands in this package`
+    `  --switch, -s         Switch SSH key for GitHub pushes\n  --help              List all available commands in this package`
   );
 }
 
-// ✅ 5. Help text
+// ✅ 6. Help text
 else {
   console.log(`
 Usage:
   npx @oninross/toolbelt --llm-guide        Generate llm.txt in the project root
   npx @oninross/toolbelt --create-component Run @oninross/create-component
   npx @oninross/toolbelt --scaffold         Scaffold Next.js + Storybook
+  npx @oninross/toolbelt --switch           Switch SSH key for GitHub pushes
+  npx @oninross/toolbelt -s                 Switch SSH key for GitHub pushes (shorthand)
   npx @oninross/toolbelt --help             List all available commands in this package
 
 Examples:
