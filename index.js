@@ -90,7 +90,7 @@ else if (args.includes("--scaffold")) {
 
 // ✅ 4. List all available commands
 else if (args.includes("--help")) {
-  console.log(`\nAvailable commands in @masterbuilder/toolbelt:`);
+  console.log(`\nAvailable commands in @oninross/toolbelt:`);
   console.log(`  --llm-guide         Generate llm.txt in the project root`);
   console.log(`  --create-component  Run @oninross/create-component`);
   console.log(`  --scaffold          Scaffold Next.js + Storybook`);
@@ -103,15 +103,15 @@ else if (args.includes("--help")) {
 else {
   console.log(`
 Usage:
-  npx @masterbuilder/toolbelt --llm-guide        Generate llm.txt in the project root
-  npx @masterbuilder/toolbelt --create-component Run @oninross/create-component
-  npx @masterbuilder/toolbelt --scaffold         Scaffold Next.js + Storybook
-  npx @masterbuilder/toolbelt --help             List all available commands in this package
+  npx @oninross/toolbelt --llm-guide        Generate llm.txt in the project root
+  npx @oninross/toolbelt --create-component Run @oninross/create-component
+  npx @oninross/toolbelt --scaffold         Scaffold Next.js + Storybook
+  npx @oninross/toolbelt --help             List all available commands in this package
 
 Examples:
-  npx @masterbuilder/toolbelt --llm-guide
-  npx @masterbuilder/toolbelt --create-component
-  npx @masterbuilder/toolbelt --scaffold
-  npx @masterbuilder/toolbelt --help
+  npx @oninross/toolbelt --llm-guide
+  npx @oninross/toolbelt --create-component
+  npx @oninross/toolbelt --scaffold
+  npx @oninross/toolbelt --help
   `);
 }
