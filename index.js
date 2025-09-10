@@ -68,10 +68,10 @@ else if (args.includes("--create-component")) {
   }
 }
 
-// ✅ 3. Scaffold Next.js + Tailwind + Storybook
+// ✅ 3. Scaffold Next.js + Storybook
 else if (args.includes("--scaffold")) {
   const cmds = [
-    "npx create-next-app@latest . --app --typescript --eslint --tailwind",
+    "npx create-next-app@latest . --app --typescript --eslint",
     "npm install -D sass-embedded",
     "npx storybook@latest init",
   ];
@@ -93,7 +93,7 @@ else if (args.includes("--help")) {
   console.log(`\nAvailable commands in @masterbuilder/toolbelt:`);
   console.log(`  --llm-guide         Generate llm.txt in the project root`);
   console.log(`  --create-component  Run @oninross/create-component`);
-  console.log(`  --scaffold          Scaffold Next.js + Tailwind + Storybook`);
+  console.log(`  --scaffold          Scaffold Next.js + Storybook`);
   console.log(
     `  --help              List all available commands in this package`
   );
@@ -105,7 +105,7 @@ else {
 Usage:
   npx @masterbuilder/toolbelt --llm-guide        Generate llm.txt in the project root
   npx @masterbuilder/toolbelt --create-component Run @oninross/create-component
-  npx @masterbuilder/toolbelt --scaffold         Scaffold Next.js + Tailwind + Storybook
+  npx @masterbuilder/toolbelt --scaffold         Scaffold Next.js + Storybook
   npx @masterbuilder/toolbelt --help             List all available commands in this package
 
 Examples:
