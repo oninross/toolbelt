@@ -94,7 +94,9 @@ else if (args.includes("--help")) {
   console.log(`  --llm-guide         Generate llm.txt in the project root`);
   console.log(`  --create-component  Run @oninross/create-component`);
   console.log(`  --scaffold          Scaffold Next.js + Tailwind + Storybook`);
-  console.log(`  --help     List all available commands in this package`);
+  console.log(
+    `  --help              List all available commands in this package`
+  );
 }
 
 // ✅ 5. Help text
@@ -104,12 +106,12 @@ Usage:
   npx @masterbuilder/toolbelt --llm-guide        Generate llm.txt in the project root
   npx @masterbuilder/toolbelt --create-component Run @oninross/create-component
   npx @masterbuilder/toolbelt --scaffold         Scaffold Next.js + Tailwind + Storybook
-  npx @masterbuilder/toolbelt --list-commands    List all available commands in this package
+  npx @masterbuilder/toolbelt --help             List all available commands in this package
 
 Examples:
   npx @masterbuilder/toolbelt --llm-guide
   npx @masterbuilder/toolbelt --create-component
   npx @masterbuilder/toolbelt --scaffold
-  npx @masterbuilder/toolbelt --list-commands
+  npx @masterbuilder/toolbelt --help
   `);
 }
